@@ -52,13 +52,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/categorias*").permitAll()
-				.antMatchers("/pessoas*").permitAll()
-				.antMatchers("/pessoas/*").permitAll()
-				.antMatchers("/lancamentos*").permitAll()
-//				.antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/**", "/", "/lib/*", "/images/*", "/css/*", "/swagger-ui.js","/swagger-ui.min.js", "/api-docs", "/fonts/*", "/api-docs/*", "/api-docs/default/*", "/o2c.html","/webjars/**","/hystrix/**").permitAll()
 				.anyRequest().authenticated()
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.csrf().disable();
+				.and()
+					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+					.csrf().disable();
 	}
 
 	/**
@@ -69,7 +67,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	 */
 	@Override
 	public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.stateless(true).resourceId("my-resource");
+		resources.stateless(true);
 	}
 
 	/**
