@@ -1,5 +1,7 @@
 package com.example.api.config;
 
+import com.example.api.model.Usuario;
+import com.example.api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +15,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Realiza a configuração do oauth.
@@ -77,7 +84,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	 */
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new MyPasswordEncoder();
 	}
 
 	/**
@@ -88,6 +95,23 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	public MethodSecurityExpressionHandler createExpressionHandler() {
 		return new OAuth2MethodSecurityExpressionHandler();
+	}
+
+	private class MyPasswordEncoder implements PasswordEncoder {
+
+		@Autowired
+		private UsuarioRepository usuarioRepository;
+
+		@Override
+		public String encode(CharSequence charSequence) {
+			return null;
+		}
+
+		@Override
+		public boolean matches(CharSequence senhaUsuario, String senhaBanco) {
+			Optional<Usuario> usuario = usuarioRepository.findByEmail("admin@example.com");
+			return false;
+		}
 	}
 
 }
