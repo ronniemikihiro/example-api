@@ -15,13 +15,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -59,6 +56,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/categorias*").permitAll()
+				.antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -84,7 +82,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	 */
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return new MyPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 
 	/**
